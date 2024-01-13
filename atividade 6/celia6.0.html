@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vetor</title>
+</head>
+
+<body>
+    <script>
+        const listaFilmes = ["Aventura", "Comédia", "Drama", "Ficção", "Policial"]
+        document.write(listaFilmes + "<br>")
+        listaFilmes.push("Terror")
+        document.write(listaFilmes + "<br>")
+        listaFilmes.unshift("Infantil")
+        document.write(listaFilmes + "<br>")
+        listaFilmes.pop()
+        document.write(listaFilmes + "<br>")
+        listaFilmes.shift()
+        document.write(listaFilmes + "<br>")
+        listaFilmes1 = listaFilmes.slice(-2)
+        document.write(listaFilmes1 + "<br>")
+        listaFilmes2 = listaFilmes.slice(0, -2)
+        document.write(listaFilmes2 + "<br>")
+        listaFilmes3 = listaFilmes.splice(3, 2)
+        document.write(listaFilmes3 + "<br>")
+    </script>
+</body>
+
+</html>

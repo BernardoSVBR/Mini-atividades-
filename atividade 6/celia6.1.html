@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultório</title>
+    <style>
+        img.alta {
+            float: left;
+            height: 300px;
+            width: 300px;
+        }
+
+        h1 {
+            border-bottom-style: inset;
+        }
+
+        pre {
+            font-size: 1.2em;
+        }
+
+        .fonteAzul {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="dentista.png" alt="Consultório Dentário" class="alta">
+    <h1>Clínica Odontológica</h1>
+    <form>
+        <p> Digite o paciente:
+            <input type="text" id="paciente" required autofocus>
+            <input type="submit" value="Adicionar">
+            <input type="button" value="Prioridade" id="prioridade">
+            <input type="button" value="Atender" id="atender">
+        </p>
+    </form>
+    <h3>Lista de Atendimento:
+        <span class="fonteAzul"></span>
+    </h3>
+    <pre></pre>
+    <script>
+        const frm = document.querySelector("form");
+        const respNome = document.querySelector("span");
+        const respLista = document.querySelector("pre");
+        const pacientes = [];
+
+        frm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nome = frm.paciente.value;
+            pacientes.push(nome);
+            let lista = "";
+            for (let i = 0; i < pacientes.length; i++) {
+                lista += `${i + 1}.${pacientes[i]}\n`;
+            }
+            respLista.innerText = lista;
+            frm.paciente.value = "";
+        });
+
+        frm.prioridade.addEventListener("click", () => {
+            if (!frm.checkValidity()) {
+                alert("Informe o nome do paciente a ser atendido em caráter de urgência");
+                frm.paciente.focus();
+                return;
+            }
+            const nome = frm.paciente.value;
+            pacientes.unshift(nome);
+            let lista = "";
+            pacientes.forEach((paciente, i) => {
+                lista += `${i + 1}.${paciente}\n`;
+            });
+            respLista.innerText = lista;
+            frm.paciente.value = "";
+            frm.paciente.focus();
+        });
+
+        frm.atender.addEventListener("click", () => {
+            if (pacientes.length === 0) {
+                alert("Não há pacientes na lista de espera");
+                frm.paciente.focus();
+                return;
+            }
+            const atender = pacientes.shift();
+            respNome.innerText = atender;
+            let lista = "";
+            pacientes.forEach((paciente, i) => {
+                lista += `${i + 1}.${paciente}\n`;
+            });
+            respLista.innerText = lista;
+        });
+    </script>
+</body>
+
+</html>

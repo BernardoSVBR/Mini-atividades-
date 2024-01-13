@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Filmes</title>
+    <style>
+        img.gif {
+            height: 50px;
+            width: 50px;
+            margin-left: 10px;
+        }
+
+        h1 {
+            border-bottom-style: inset;
+        }
+
+        pre {
+            font-size: 1.2em;
+        }
+
+        .fonteAzul {
+            color: red;
+        }
+
+        .opcoes-filme {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .opcoes-filme input[type="button"] {
+            margin-right: 10px;
+        }
+
+        .respostas {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .respostas h3 {
+            margin-right: 10px;
+        }
+
+        .assistir-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .inibutton {
+            padding: 1%;
+            border-radius: 10%;
+        }
+    </style>
+</head>
+
+<button type="button" class="inibutton">Criar conta</button>
+
+<body>
+    <h1>Lista de Filmes</h1>
+    <div class="opcoes-filme">
+        <input type="button" value="Comédia" class="opcao-filme">
+        <img class="gif" src="icons8-feliz.gif" alt="">
+        <span class="resposta-comedia"></span>
+    </div>
+    <div class="opcoes-filme">
+        <input type="button" value="Drama" class="opcao-filme">
+        <img class="gif" src="icons8-triste.gif" alt="">
+        <span class="resposta-drama"></span>
+    </div>
+    <div class="opcoes-filme">
+        <input type="button" value="Terror" class="opcao-filme">
+        <img class="gif" src="icons8-pennywise.gif" alt="">
+        <span class="resposta-terror"></span>
+    </div>
+    <div class="respostas">
+        <h3>Filme Selecionado:</h3>
+        <span class="fonteAzul"></span>
+        <img class="gif" src="" alt="">
+        <button class="assistir-btn" style="display: none;">X</button>
+    </div>
+    <pre></pre>
+    <script>
+        const respNome = document.querySelector(".fonteAzul");
+        const respLista = document.querySelector("pre");
+        const opcoesFilme = document.querySelectorAll(".opcao-filme");
+        const respostaComedia = document.querySelector(".resposta-comedia");
+        const respostaDrama = document.querySelector(".resposta-drama");
+        const respostaTerror = document.querySelector(".resposta-terror");
+        const resposta = document.querySelector(".respostas");
+        const assistirBtn = document.querySelector(".assistir-btn");
+        const filmes = [];
+
+        function exibirFilme(filme) {
+            respNome.innerText = filme;
+            resposta.style.display = "flex";
+            respostaComedia.innerText = "";
+            respostaDrama.innerText = "";
+            respostaTerror.innerText = "";
+            assistirBtn.style.display = "inline";
+        }
+
+        function ocultarFilme() {
+            respNome.innerText = "";
+            resposta.style.display = "none";
+        }
+
+        function atualizarLista() {
+            let lista = "";
+            filmes.forEach((filme, i) => {
+                lista += `${i + 1}.${filme}\n`;
+            });
+            respLista.innerText = lista;
+        }
+
+        function adicionarFilme(filme, respostaSpan) {
+            filmes.push(filme);
+            respostaSpan.innerText = filme;
+            atualizarLista();
+        }
+
+        function removerFilme(index) {
+            filmes.splice(index, 1);
+        }
+
+        function assistirFilme() {
+            if (filmes.length === 0) {
+                alert("Não há filmes na lista");
+                return;
+            }
+            const filmeSelecionado = filmes.shift();
+            if (filmes.length > 0) {
+                const proximoFilme = filmes[0];
+                exibirFilme(proximoFilme);
+            } else {
+                ocultarFilme();
+                assistirBtn.style.display = "none";
+            }
+            atualizarLista();
+        }
+
+        opcoesFilme.forEach((opcao) => {
+            const filme = opcao.value;
+
+            opcao.addEventListener("click", () => {
+                if (filme === "Comédia") {
+                    adicionarFilme(filme, respostaComedia);
+                } else if (filme === "Drama") {
+                    adicionarFilme(filme, respostaDrama);
+                } else if (filme === "Terror") {
+                    adicionarFilme(filme, respostaTerror);
+                }
+
+                exibirFilme(filme);
+            });
+        });
+
+        assistirBtn.addEventListener("click", assistirFilme);
+        ocultarFilme();
+
+        function removerResposta() {
+            const respostaRemovida = this.previousElementSibling.previousElementSibling.innerText;
+            const respostaSpan = document.querySelector(
+                `.resposta-${respostaRemovida.toLowerCase()}`
+            );
+            const index = filmes.indexOf(respostaRemovida);
+            if (index > -1) {
+                removerFilme(index);
+                respostaSpan.innerText = "";
+                this.removeEventListener("click", removerResposta);
+                if (filmes.length === 0) {
+                    ocultarFilme();
+                    assistirBtn.style.display = "none";
+                } else {
+                    const proximoFilme = filmes[0];
+                    exibirFilme(proximoFilme);
+                }
+                atualizarLista();
+            }
+        }
+
+        opcoesFilme.forEach((opcao) => {
+            const removerBtn = opcao.nextElementSibling;
+            removerBtn.addEventListener("click", removerResposta);
+        });
+    </script>
+</body>
+
+</html>
